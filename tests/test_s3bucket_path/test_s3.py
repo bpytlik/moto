@@ -180,14 +180,14 @@ class MyModel(object):
 #     conn.delete_bucket.when.called_with("foobar").should.throw(S3ResponseError)
 
 
-@mock_s3bucket_path
-def test_get_all_buckets():
-    conn = create_connection('the_key', 'the_secret')
-    conn.create_bucket("foobar")
-    conn.create_bucket("foobar2")
-    buckets = conn.get_all_buckets()
+# @mock_s3bucket_path
+# def test_get_all_buckets():
+#     conn = create_connection('the_key', 'the_secret')
+#     conn.create_bucket("foobar")
+#     conn.create_bucket("foobar2")
+#     buckets = conn.get_all_buckets()
 
-    buckets.should.have.length_of(2)
+#     buckets.should.have.length_of(2)
 
 
 # @mock_s3bucket_path
@@ -195,7 +195,7 @@ def test_get_all_buckets():
 #     conn = create_connection('the_key', 'the_secret')
 #     bucket = conn.create_bucket("foobar")
 
-#     requests.post("https://foobar.s3.amazonaws.com/", {
+#     requests.post("https://s3.amazonaws.com/foobar", {
 #         'key': 'the-key',
 #         'file': 'nothing'
 #     })
@@ -208,7 +208,7 @@ def test_get_all_buckets():
 #     conn = create_connection('the_key', 'the_secret')
 #     bucket = conn.create_bucket("foobar")
 
-#     requests.post("https://foobar.s3.amazonaws.com/", {
+#     requests.post("https://s3.amazonaws.com/foobar", {
 #         'key': 'the-key',
 #         'file': 'nothing',
 #         'x-amz-meta-test': 'metadata'
@@ -236,17 +236,17 @@ def test_get_all_buckets():
 #     k.set_contents_from_string('somedata')
 
 
-# @mock_s3bucket_path
-# def test_key_with_special_characters():
-#     conn = create_connection()
-#     bucket = conn.create_bucket('test_bucket_name')
+@mock_s3bucket_path
+def test_key_with_special_characters():
+    conn = create_connection()
+    bucket = conn.create_bucket('test_bucket_name')
 
-#     key = Key(bucket, 'test_list_keys_2/x?y')
-#     key.set_contents_from_string('value1')
+    key = Key(bucket, 'test_list_keys_2/x?y')
+    key.set_contents_from_string('value1')
 
-#     key_list = bucket.list('test_list_keys_2/', '/')
-#     keys = [x for x in key_list]
-#     keys[0].name.should.equal("test_list_keys_2/x?y")
+    key_list = bucket.list('test_list_keys_2/', '/')
+    keys = [x for x in key_list]
+    keys[0].name.should.equal("test_list_keys_2/x?y")
 
 
 # @mock_s3bucket_path

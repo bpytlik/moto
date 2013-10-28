@@ -118,14 +118,16 @@ def key_response(request, full_url, headers):
 
 def _key_response(request, full_url, headers):
     print "In my _key_response"
+    import sys
     parsed_url = urlparse(full_url)
     method = request.method
 
     # key_name = parsed_url.path.lstrip('/')
-    key_name = parsed_url.path.split("/")[2]
+    key_name = "/".join(parsed_url.path.rstrip("/").split("/")[2:])
 
     bucket_name = bucket_name_from_url(full_url)
-    print "bucket_name:" + str(bucket_name) + " key_name:" + str(key_name)
+    print >> sys.stderr, "key_name: " + str(key_name) + " bucket_name: " + str(bucket_name)
+
     if hasattr(request, 'body'):
         # Boto
         body = request.body

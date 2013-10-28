@@ -24,17 +24,17 @@ class MyModel(object):
         k.set_contents_from_string(self.value)
 
 
-@mock_s3
-def test_my_model_save():
-    # Create Bucket so that test can run
-    conn = boto.connect_s3('the_key', 'the_secret')
-    conn.create_bucket('mybucket')
-    ####################################
+# @mock_s3
+# def test_my_model_save():
+#     # Create Bucket so that test can run
+#     conn = boto.connect_s3('the_key', 'the_secret')
+#     conn.create_bucket('mybucket')
+#     ####################################
 
-    model_instance = MyModel('steve', 'is awesome')
-    model_instance.save()
+#     model_instance = MyModel('steve', 'is awesome')
+#     model_instance.save()
 
-    conn.get_bucket('mybucket').get_key('steve').get_contents_as_string().should.equal('is awesome')
+#     conn.get_bucket('mybucket').get_key('steve').get_contents_as_string().should.equal('is awesome')
 
 
 # @mock_s3
@@ -220,17 +220,17 @@ def test_my_model_save():
 #     k.set_contents_from_string('somedata')
 
 
-# @mock_s3
-# def test_key_with_special_characters():
-#     conn = boto.connect_s3()
-#     bucket = conn.create_bucket('test_bucket_name')
+@mock_s3
+def test_key_with_special_characters():
+    conn = boto.connect_s3()
+    bucket = conn.create_bucket('test_bucket_name')
 
-#     key = Key(bucket, 'test_list_keys_2/x?y')
-#     key.set_contents_from_string('value1')
+    key = Key(bucket, 'test_list_keys_2/x?y')
+    key.set_contents_from_string('value1')
 
-#     key_list = bucket.list('test_list_keys_2/', '/')
-#     keys = [x for x in key_list]
-#     keys[0].name.should.equal("test_list_keys_2/x?y")
+    key_list = bucket.list('test_list_keys_2/', '/')
+    keys = [x for x in key_list]
+    keys[0].name.should.equal("test_list_keys_2/x?y")
 
 
 # @mock_s3

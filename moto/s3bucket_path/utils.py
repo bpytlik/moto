@@ -2,16 +2,16 @@ import urlparse
 
 def bucket_name_from_url(url):
     print "using right bucket_name_from_url"
-    pth = urlparse.urlparse(url).path
+    pth = urlparse.urlparse(url).path.lstrip("/")
     print "pth:" + str(pth)
 
-    l = pth.split("/")
+    l = pth.rstrip("/").split("/")
     print "l:" + str(l)
     print "len was: " + str(len(l))
-    if len(l) < 2:
+    if len(l) == 0:
         return None
-    print "returning: " + l[1]
-    return l[1]
+    print "returning: " + l[0]
+    return l[0]
     
     # if domain.startswith('www.'):
     #     domain = domain[4:]
