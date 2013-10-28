@@ -13,6 +13,7 @@ def all_buckets():
     # No bucket specified. Listing all buckets
     all_buckets = s3_backend.get_all_buckets()
     template = Template(S3_ALL_BUCKETS)
+    print "all_buckets:" + str(all_buckets)
     return template.render(buckets=all_buckets)
 
 
@@ -38,6 +39,7 @@ def _bucket_response(request, full_url, headers):
         raise RuntimeError("WHEE l:" + str(l))
     if not bucket_name:
         # If no bucket specified, list all buckets
+        print "Using all buckets"
         return all_buckets()
 
     if method == 'GET':

@@ -18,7 +18,7 @@ print >> sys.stderr, boto.s3
 print >> sys.stderr, boto.s3.connection
 
 def create_connection(key = None, secret = None):
-    print >> sys.stderr, "key: " + key + " secret: " + secret
+    print >> sys.stderr, "key: " + str(key) + " secret: " + str(secret)
     return boto.connect_s3(key, secret, 
         calling_format=OrdinaryCallingFormat())
 
@@ -35,22 +35,22 @@ class MyModel(object):
         k.set_contents_from_string(self.value)
 
 
-@mock_s3bucket_path
-def test_my_model_save():
-    # Create Bucket so that test can run
-    conn = create_connection('the_key', 'the_secret')
-    print >> sys.stderr, "created connection: " + str(conn)
-    conn.create_bucket('mybucket')
-    print >> sys.stderr, "created bucket"
-    ####################################
+# @mock_s3bucket_path
+# def test_my_model_save():
+#     # Create Bucket so that test can run
+#     conn = create_connection('the_key', 'the_secret')
+#     print >> sys.stderr, "created connection: " + str(conn)
+#     conn.create_bucket('mybucket')
+#     print >> sys.stderr, "created bucket"
+#     ####################################
 
-    model_instance = MyModel('steve', 'is awesome')
-    print >> sys.stderr, "Created model"
-    model_instance.save()
-    print >> sys.stderr, "saved model"
+#     model_instance = MyModel('steve', 'is awesome')
+#     print >> sys.stderr, "Created model"
+#     model_instance.save()
+#     print >> sys.stderr, "saved model"
 
-    conn.get_bucket('mybucket').get_key('steve').get_contents_as_string().should.equal('is awesome')
-    print >> sys.stderr, "got bucket"
+#     conn.get_bucket('mybucket').get_key('steve').get_contents_as_string().should.equal('is awesome')
+#     print >> sys.stderr, "got bucket"
 
 
 # @mock_s3bucket_path
@@ -180,14 +180,14 @@ def test_my_model_save():
 #     conn.delete_bucket.when.called_with("foobar").should.throw(S3ResponseError)
 
 
-# @mock_s3bucket_path
-# def test_get_all_buckets():
-#     conn = create_connection('the_key', 'the_secret')
-#     conn.create_bucket("foobar")
-#     conn.create_bucket("foobar2")
-#     buckets = conn.get_all_buckets()
+@mock_s3bucket_path
+def test_get_all_buckets():
+    conn = create_connection('the_key', 'the_secret')
+    conn.create_bucket("foobar")
+    conn.create_bucket("foobar2")
+    buckets = conn.get_all_buckets()
 
-#     buckets.should.have.length_of(2)
+    buckets.should.have.length_of(2)
 
 
 # @mock_s3bucket_path
@@ -219,12 +219,12 @@ def test_my_model_save():
 
 # @mock_s3bucket_path
 # def test_bucket_method_not_implemented():
-#     requests.patch.when.called_with("https://foobar.s3.amazonaws.com/").should.throw(NotImplementedError)
+#     requests.patch.when.called_with("https://s3.amazonaws.com/foobar").should.throw(NotImplementedError)
 
 
 # @mock_s3bucket_path
 # def test_key_method_not_implemented():
-#     requests.post.when.called_with("https://foobar.s3.amazonaws.com/foo").should.throw(NotImplementedError)
+#     requests.post.when.called_with("https://s3.amazonaws.com/foobar/foo").should.throw(NotImplementedError)
 
 
 # @mock_s3bucket_path

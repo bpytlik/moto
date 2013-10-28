@@ -26,7 +26,7 @@ class MockAWS(object):
         import sys
         for method in HTTPretty.METHODS:
             for key, value in self.backend.urls.iteritems():
-                print >> sys.stderr, "Mocking out key: " + str(key) + " value: " + str(value) + " method:" + str(method)
+                # print >> sys.stderr, "Mocking out key: " + str(key) + " value: " + str(value) + " method:" + str(method)
                 HTTPretty.register_uri(
                     method=method,
                     uri=re.compile(key),
