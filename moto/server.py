@@ -25,6 +25,11 @@ def configure_urls(service):
     app.view_functions = {}
     app.url_map = Map()
     app.url_map.converters['regex'] = RegexConverter
+    print "backend:"
+    print str(backend)
+    print "b.fps:"
+    print str(backend.flask_paths)
+    print backend.flask_paths
     for url_path, handler in backend.flask_paths.iteritems():
         app.route(url_path, methods=HTTP_METHODS)(convert_flask_to_httpretty_response(handler))
 

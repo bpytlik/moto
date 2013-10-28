@@ -65,7 +65,9 @@ class convert_flask_to_httpretty_response(object):
 
     def __call__(self, args=None, **kwargs):
         headers = dict(request.headers)
+        print "self.callback:" + str(self.callback)
         result = self.callback(request, request.url, headers)
+        print "result:" + str(result)
         # result is a status, headers, response tuple
         status, headers, response = result
         return response, status, headers
