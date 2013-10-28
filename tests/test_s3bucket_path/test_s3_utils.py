@@ -11,4 +11,4 @@ def test_localhost_bucket():
 
 
 def test_localhost_without_bucket():
-    expect(bucket_name_from_url('https://www.localhost:5000/def')).should.equal(None)
+    expect(bucket_name_from_url('https://www.localhost:5000')).should.equal(None)

@@ -5,10 +5,10 @@ def bucket_name_from_url(url):
     pth = urlparse.urlparse(url).path.lstrip("/")
     print "pth:" + str(pth)
 
-    l = pth.rstrip("/").split("/")
+    l = pth.lstrip("/").split("/")
     print "l:" + str(l)
     print "len was: " + str(len(l))
-    if len(l) == 0:
+    if len(l) == 0 or l[0] == "":
         return None
     print "returning: " + l[0]
     return l[0]
