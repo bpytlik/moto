@@ -7,6 +7,8 @@ from .models import s3bucket_path_backend
 s3_backend = s3bucket_path_backend
 from .utils import bucket_name_from_url
 
+# from moto.s3.responses import all_buckets
+
 def all_buckets():
     # No bucket specified. Listing all buckets
     all_buckets = s3_backend.get_all_buckets()
@@ -31,6 +33,9 @@ def _bucket_response(request, full_url, headers):
     method = request.method
 
     bucket_name = bucket_name_from_url(full_url)
+    l = parsed_url.path.split("/")
+    if len(l) > 2 and l[2] != "":
+        raise RuntimeError("WHEE l:" + str(l))
     if not bucket_name:
         # If no bucket specified, list all buckets
         return all_buckets()
@@ -100,7 +105,7 @@ def _bucket_response(request, full_url, headers):
 
 
 def key_response(request, full_url, headers):
-    print "in key_response"
+    print "\n\n\nin key_response"
     response = _key_response(request, full_url, headers)
     if isinstance(response, basestring):
         return 200, headers, response
@@ -110,11 +115,15 @@ def key_response(request, full_url, headers):
 
 
 def _key_response(request, full_url, headers):
+    print "In my _key_response"
     parsed_url = urlparse(full_url)
     method = request.method
 
-    key_name = parsed_url.path.lstrip('/')
+    # key_name = parsed_url.path.lstrip('/')
+    key_name = parsed_url.path.split("/")[2]
+
     bucket_name = bucket_name_from_url(full_url)
+    print "bucket_name:" + str(bucket_name) + " key_name:" + str(key_name)
     if hasattr(request, 'body'):
         # Boto
         body = request.body
@@ -160,6 +169,8 @@ def _key_response(request, full_url, headers):
                         new_key.set_metadata(meta_key, metadata)
         template = Template(S3_OBJECT_RESPONSE)
         headers.update(new_key.response_dict)
+        print "\n\n\nreturning from put, headers:" + str(headers)
+        print "new_key.response_dict:" + str(new_key.response_dict)
         return 200, headers, template.render(key=new_key)
     elif method == 'HEAD':
         key = s3_backend.get_key(bucket_name, key_name)

@@ -99,6 +99,9 @@ def _bucket_response(request, full_url, headers):
 
 
 def key_response(request, full_url, headers):
+    import sys
+    print >> sys.stderr, "\n\n\nIn s3 key_response"
+    raise RuntimeError("goo")
     response = _key_response(request, full_url, headers)
     if isinstance(response, basestring):
         return 200, headers, response
@@ -108,6 +111,7 @@ def key_response(request, full_url, headers):
 
 
 def _key_response(request, full_url, headers):
+    raise RuntimeError("goo2")
     parsed_url = urlparse(full_url)
     method = request.method
 
