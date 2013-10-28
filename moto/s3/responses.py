@@ -99,8 +99,6 @@ def _bucket_response(request, full_url, headers):
 
 
 def key_response(request, full_url, headers):
-    import sys
-    print >> sys.stderr, "\n\n\nIn s3 key_response"
     response = _key_response(request, full_url, headers)
     if isinstance(response, basestring):
         return 200, headers, response
@@ -110,14 +108,11 @@ def key_response(request, full_url, headers):
 
 
 def _key_response(request, full_url, headers):
-    import sys
-    print >> sys.stderr, "in _key_response"
     parsed_url = urlparse(full_url)
     method = request.method
 
     key_name = parsed_url.path.lstrip('/')
     bucket_name = bucket_name_from_url(full_url)
-    print >> sys.stderr, "key_name: " + str(key_name) + " bucket_name: " + str(bucket_name)
     if hasattr(request, 'body'):
         # Boto
         body = request.body

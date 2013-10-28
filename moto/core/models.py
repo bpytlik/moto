@@ -23,10 +23,8 @@ class MockAWS(object):
         self.backend.reset()
         HTTPretty.enable()
 
-        import sys
         for method in HTTPretty.METHODS:
             for key, value in self.backend.urls.iteritems():
-                # print >> sys.stderr, "Mocking out key: " + str(key) + " value: " + str(value) + " method:" + str(method)
                 HTTPretty.register_uri(
                     method=method,
                     uri=re.compile(key),
@@ -63,7 +61,6 @@ class BaseBackend(object):
     def _url_module(self):
         backend_module = self.__class__.__module__
         backend_urls_module_name = backend_module.replace("models", "urls")
-        print "backend_urls_module_name " + backend_urls_module_name
         backend_urls_module = __import__(backend_urls_module_name, fromlist=['url_bases', 'url_paths'])
         return backend_urls_module
 
@@ -104,7 +101,6 @@ class BaseBackend(object):
         """
         The url paths that will be used for the flask server
         """
-        print "in flask_paths"
         paths = {}
         for url_path, handler in self.url_paths.iteritems():
             url_path = convert_regex_to_flask_path(url_path)
