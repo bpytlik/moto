@@ -33,16 +33,12 @@ class ResponseObject(object):
 
 
     def _bucket_response(self, request, full_url, headers):
-        import sys
-        print >> sys.stderr, "In _bucket_response"
         parsed_url = urlparse(full_url)
         querystring = parse_qs(parsed_url.query)
         method = request.method
 
         bucket_name = self.bucket_name_from_url(full_url)
         l = parsed_url.path.split("/")
-        if len(l) > 2 and l[2] != "":
-            raise RuntimeError("WHEE l:" + str(l))
         if not bucket_name:
             # If no bucket specified, list all buckets
             return self.all_buckets()
@@ -121,13 +117,9 @@ class ResponseObject(object):
 
 
     def _key_response(self, request, full_url, headers):
-        import sys
-        print >> sys.stderr, "in _key_response"
-        print >> sys.stderr, "self.bucket_name_from_url:" + str(self.bucket_name_from_url)
         parsed_url = urlparse(full_url)
         method = request.method
 
-        # key_name = parsed_url.path.lstrip('/')
         key_name = self.parse_key_name(parsed_url.path)
 
         bucket_name = self.bucket_name_from_url(full_url)

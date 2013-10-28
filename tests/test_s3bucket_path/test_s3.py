@@ -14,13 +14,8 @@ import sure  # noqa
 
 from moto import mock_s3bucket_path
 
-print >> sys.stderr, boto.s3
-print >> sys.stderr, boto.s3.connection
-
 def create_connection(key = None, secret = None):
-    print >> sys.stderr, "key: " + str(key) + " secret: " + str(secret)
-    return boto.connect_s3(key, secret, 
-        calling_format=OrdinaryCallingFormat())
+    return boto.connect_s3(key, secret, calling_format=OrdinaryCallingFormat())
 
 class MyModel(object):
     def __init__(self, name, value):
@@ -39,18 +34,13 @@ class MyModel(object):
 def test_my_model_save():
     # Create Bucket so that test can run
     conn = create_connection('the_key', 'the_secret')
-    print >> sys.stderr, "created connection: " + str(conn)
     conn.create_bucket('mybucket')
-    print >> sys.stderr, "created bucket"
     ####################################
 
     model_instance = MyModel('steve', 'is awesome')
-    print >> sys.stderr, "Created model"
     model_instance.save()
-    print >> sys.stderr, "saved model"
 
     conn.get_bucket('mybucket').get_key('steve').get_contents_as_string().should.equal('is awesome')
-    print >> sys.stderr, "got bucket"
 
 
 @mock_s3bucket_path
@@ -65,7 +55,7 @@ def test_missing_key_urllib2():
     conn = create_connection('the_key', 'the_secret')
     conn.create_bucket("foobar")
 
-    urllib2.urlopen.when.called_with("http://foobar.s3.amazonaws.com/the-key").should.throw(urllib2.HTTPError)
+    urllib2.urlopen.when.called_with("http://s3.amazonaws.com/foobar/the-key").should.throw(urllib2.HTTPError)
 
 
 @mock_s3bucket_path
