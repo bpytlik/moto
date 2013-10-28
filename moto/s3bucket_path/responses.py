@@ -16,12 +16,10 @@ def all_buckets():
     # No bucket specified. Listing all buckets
     all_buckets = s3_backend.get_all_buckets()
     template = Template(S3_ALL_BUCKETS)
-    print "all_buckets:" + str(all_buckets)
     return template.render(buckets=all_buckets)
 
 
 def bucket_response(request, full_url, headers):
-    print "in bucket_response"
     response = _bucket_response(request, full_url, headers)
     if isinstance(response, basestring):
         return 200, headers, response
@@ -42,7 +40,6 @@ def _bucket_response(request, full_url, headers):
         raise RuntimeError("WHEE l:" + str(l))
     if not bucket_name:
         # If no bucket specified, list all buckets
-        print "Using all buckets"
         return all_buckets()
 
     if method == 'GET':
@@ -110,7 +107,6 @@ def _bucket_response(request, full_url, headers):
 
 
 def key_response(request, full_url, headers):
-    print "\n\n\nin key_response"
     response = _key_response(request, full_url, headers)
     if isinstance(response, basestring):
         return 200, headers, response
@@ -120,7 +116,6 @@ def key_response(request, full_url, headers):
 
 
 def _key_response(request, full_url, headers):
-    print "In my _key_response"
     import sys
     parsed_url = urlparse(full_url)
     method = request.method
@@ -129,7 +124,6 @@ def _key_response(request, full_url, headers):
     key_name = "/".join(parsed_url.path.rstrip("/").split("/")[2:])
 
     bucket_name = bucket_name_from_url(full_url)
-    print >> sys.stderr, "key_name: " + str(key_name) + " bucket_name: " + str(bucket_name)
 
     if hasattr(request, 'body'):
         # Boto
@@ -176,8 +170,6 @@ def _key_response(request, full_url, headers):
                         new_key.set_metadata(meta_key, metadata)
         template = Template(S3_OBJECT_RESPONSE)
         headers.update(new_key.response_dict)
-        print "\n\n\nreturning from put, headers:" + str(headers)
-        print "new_key.response_dict:" + str(new_key.response_dict)
         return 200, headers, template.render(key=new_key)
     elif method == 'HEAD':
         key = s3_backend.get_key(bucket_name, key_name)
