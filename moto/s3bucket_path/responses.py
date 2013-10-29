@@ -1,10 +1,5 @@
-from urlparse import parse_qs, urlparse
-import re
-
-from jinja2 import Template
-
 from .models import s3bucket_path_backend
-s3_backend = s3bucket_path_backend
+
 from .utils import bucket_name_from_url
 
 from moto.s3.responses import S3_ALL_BUCKETS, S3_BUCKET_GET_RESPONSE, \
@@ -15,6 +10,6 @@ from moto.s3.responses import S3_ALL_BUCKETS, S3_BUCKET_GET_RESPONSE, \
 
 def parse_key_name(pth):
     return "/".join(pth.rstrip("/").split("/")[2:])
-     
-S3BucketPathResponseInstance = ResponseObject(s3bucket_path_backend, 
+
+S3BucketPathResponseInstance = ResponseObject(s3bucket_path_backend,
     bucket_name_from_url, parse_key_name)

@@ -38,7 +38,6 @@ class ResponseObject(object):
         method = request.method
 
         bucket_name = self.bucket_name_from_url(full_url)
-        l = parsed_url.path.split("/")
         if not bucket_name:
             # If no bucket specified, list all buckets
             return self.all_buckets()
